@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CapitalEdge — Smarter Investing Starts Here</title>
+<meta name="description" content="Real-time market data, AI-powered stock analysis, live news, and financial calculators for serious investors." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080b0f;--bg2:#0d1117;--surface:#141c26;--surface2:#1a2535;--border:#1e2d40;
+  --gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,0.1);
+  --teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.07);
+  --text:#e8edf2;--text2:#8fa3b8;--text3:#4d6478;
+  --red:#ef4444;--green:#22c55e;
+  --font-display:'Cormorant Garamond',serif;--font-sans:'Syne',sans-serif;--font-mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;background:rgba(8,11,15,0.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;font-weight:600}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+.nav-links a{color:var(--text2);transition:color 0.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#080b0f;padding:0.5rem 1.2rem;border-radius:3px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;transition:background 0.2s}
+.nav-cta:hover{background:var(--gold2)}
+
+/* TICKER */
+.ticker-wrap{width:100%;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:0.6rem 0;position:relative;z-index:1;margin-top:68px}
+.ticker{display:flex;gap:3rem;animation:ticker 40s linear infinite;white-space:nowrap;font-family:var(--font-mono);font-size:0.78rem}
+.ticker-item{display:flex;align-items:center;gap:0.5rem}
+.ticker-item .sym{color:var(--text2)}
+.ticker-item .price{color:var(--text);font-weight:500}
+.chg.up{color:var(--green)}.chg.dn{color:var(--red)}
+
+/* HERO */
+.hero{position:relative;min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 5% 60px;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black,transparent)}
+.hero-glow{position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(201,168,76,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold-dim);border:1px solid rgba(201,168,76,0.25);border-radius:100px;padding:0.35rem 1rem;font-size:0.75rem;font-family:var(--font-mono);color:var(--gold);letter-spacing:0.05em;margin-bottom:2rem;animation:fadeUp 0.6s ease both;position:relative;z-index:1}
+.hero-badge .dot{animation:pulse 2s infinite}
+.hero h1{font-family:var(--font-display);font-size:clamp(3rem,7vw,6rem);font-weight:300;line-height:1.05;max-width:900px;margin-bottom:1.5rem;animation:fadeUp 0.7s 0.1s ease both;position:relative;z-index:1}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero>p{font-size:1rem;color:var(--text2);max-width:520px;line-height:1.75;margin-bottom:2.5rem;animation:fadeUp 0.7s 0.2s ease both;position:relative;z-index:1}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.7s 0.3s ease both;position:relative;z-index:1}
+
+/* BUTTONS */
+.btn-primary{background:var(--gold);color:#080b0f;padding:0.85rem 2rem;border-radius:3px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.2s;display:inline-block}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,0.25)}
+.btn-secondary{background:transparent;color:var(--text2);padding:0.85rem 2rem;border-radius:3px;font-weight:600;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;display:inline-block}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+
+/* MARKET STATUS */
+.market-status-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0.75rem 5%;display:flex;gap:2rem;overflow-x:auto;position:relative;z-index:1}
+.status-item{display:flex;align-items:center;gap:0.6rem;white-space:nowrap}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.status-dot.closed{background:var(--red);animation:none}
+.status-label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text3);letter-spacing:0.08em}
+.status-val{font-family:var(--font-mono);font-size:0.82rem;font-weight:500}
+
+/* SECTIONS */
+section{position:relative;z-index:1}
+.container{max-width:1200px;margin:0 auto;padding:0 5%;position:relative;z-index:1}
+.section-label{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.75rem}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--gold)}
+.section-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:300;line-height:1.15}
+.section-title em{font-style:italic;color:var(--gold)}
+
+/* STATS */
+.stats-bar{padding:4rem 0;border-bottom:1px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.stat-item{background:var(--bg2);padding:2rem 1.5rem;text-align:center;transition:background 0.2s}
+.stat-item:hover{background:var(--surface)}
+.stat-num{font-family:var(--font-display);font-size:2.4rem;font-weight:600;color:var(--gold);line-height:1;margin-bottom:0.4rem}
+.stat-label{font-size:0.75rem;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-mono)}
+
+/* NEWS */
+.articles-section{padding:5rem 0}
+.news-tabs{display:flex;gap:0.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.news-tab{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:0.45rem 1rem;font-size:0.78rem;font-family:var(--font-mono);letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);cursor:pointer;transition:all 0.2s}
+.news-tab.active,.news-tab:hover{background:var(--gold-dim);border-color:rgba(201,168,76,0.3);color:var(--gold)}
+.articles-layout{display:grid;grid-template-columns:1fr 320px;gap:2rem}
+.articles-main{display:flex;flex-direction:column;gap:1.25rem}
+.article-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;transition:all 0.2s;cursor:pointer}
+.article-card:hover{border-color:rgba(201,168,76,0.35);transform:translateX(4px)}
+.article-card.featured{flex-direction:column}
+.article-img{width:160px;min-height:120px;flex-shrink:0;background:var(--surface);overflow:hidden;border-right:1px solid var(--border)}
+.article-img img{width:100%;height:100%;object-fit:cover;opacity:0.85}
+.article-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;min-height:120px}
+.article-card.featured .article-img{width:100%;min-height:180px;border-right:none;border-bottom:1px solid var(--border)}
+.article-body{padding:1rem 1.25rem;display:flex;flex-direction:column;justify-content:center}
+.article-tag{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem}
+.article-title{font-family:var(--font-display);font-size:1.1rem;font-weight:400;line-height:1.3;margin-bottom:0.4rem}
+.article-card.featured .article-title{font-size:1.4rem}
+.article-excerpt{font-size:0.8rem;color:var(--text2);line-height:1.55;margin-bottom:0.5rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.article-meta{font-family:var(--font-mono);font-size:0.65rem;color:var(--text3);display:flex;gap:0.75rem}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:1.5rem}
+.sidebar-widget{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.widget-header{padding:0.9rem 1.25rem;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;justify-content:space-between}
+.live-dot{color:var(--green);display:flex;align-items:center;gap:0.3rem;font-size:0.65rem}
+.live-dot::before{content:'●';animation:pulse 1.5s infinite}
+.movers-list{padding:0.25rem 0}
+.mover-row{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 1.25rem;border-bottom:1px solid rgba(30,45,64,0.5);transition:background 0.15s;cursor:pointer}
+.mover-row:last-child{border-bottom:none}
+.mover-row:hover{background:var(--surface)}
+.mover-sym{font-family:var(--font-mono);font-size:0.82rem;font-weight:500}
+.mover-name{font-size:0.7rem;color:var(--text3)}
+.mover-price{font-family:var(--font-mono);font-size:0.82rem;text-align:right}
+.mover-pct{font-family:var(--font-mono);font-size:0.72rem;text-align:right}
+.up{color:var(--green)}.dn{color:var(--red)}
+
+/* FEAR & GREED */
+.fg-widget{padding:1.5rem;text-align:center}
+.fg-value{font-family:var(--font-display);font-size:2.2rem;font-weight:600;color:var(--gold);margin-bottom:0.2rem}
+.fg-label{font-family:var(--font-mono);font-size:0.72rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase}
+
+/* AD ZONES */
+.ad-zone{background:var(--surface);border:1px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.2s;position:relative;font-family:var(--font-mono);font-size:0.7rem;color:var(--text3);letter-spacing:0.1em}
+.ad-zone::after{content:'AD';position:absolute;top:4px;right:8px;font-size:0.6rem;font-family:var(--font-mono);color:var(--text3)}
+.ad-zone:hover{border-color:var(--gold);border-style:solid}
+.ad-leaderboard{width:100%;height:90px;margin:1.5rem auto}
+.ad-sidebar{width:100%;height:250px}
+.ad-inline{width:100%;height:100px;margin:1rem 0}
+
+/* AFFILIATE */
+.affiliate-section{padding:5rem 0;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.aff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:2.5rem}
+.aff-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1.5rem;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;display:block}
+.aff-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-dim),transparent);opacity:0;transition:opacity 0.25s}
+.aff-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.aff-card:hover::before{opacity:1}
+.aff-icon{font-size:1.75rem;margin-bottom:0.75rem;display:block;position:relative}
+.aff-name{font-family:var(--font-display);font-size:1.2rem;font-weight:600;margin-bottom:0.35rem;position:relative}
+.aff-desc{font-size:0.78rem;color:var(--text2);line-height:1.55;margin-bottom:1rem;position:relative}
+.aff-cta{font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:0.4rem;position:relative}
+.aff-disclaimer{font-size:0.65rem;color:var(--text3);font-family:var(--font-mono);margin-top:2rem;text-align:center}
+
+/* NEWSLETTER */
+.newsletter-section{padding:5rem 0}
+.newsletter-box{background:linear-gradient(135deg,var(--surface),var(--bg2));border:1px solid rgba(201,168,76,0.2);border-radius:12px;padding:4rem;text-align:center;position:relative;overflow:hidden}
+.newsletter-box h2{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;margin-bottom:0.75rem}
+.newsletter-box p{color:var(--text2);margin-bottom:2rem;font-size:0.95rem}
+.newsletter-form{display:flex;gap:0.75rem;max-width:460px;margin:0 auto}
+.newsletter-form input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0.85rem 1.25rem;color:var(--text);font-family:var(--font-sans);font-size:0.9rem;outline:none;transition:border-color 0.2s}
+.newsletter-form input::placeholder{color:var(--text3)}
+.newsletter-form input:focus{border-color:var(--gold)}
+.newsletter-form button{background:var(--gold);color:#080b0f;border:none;padding:0.85rem 1.75rem;border-radius:4px;font-weight:700;font-size:0.82rem;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s}
+.newsletter-form button:hover{background:var(--gold2)}
+.nl-note{font-size:0.72rem;color:var(--text3);font-family:var(--font-mono);margin-top:1rem}
+
+/* SPINNER */
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:1.5rem auto}
+.loading-text{text-align:center;color:var(--text3);font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.1em}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface2);border:1px solid var(--gold);border-radius:6px;padding:1rem 1.5rem;font-size:0.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;z-index:1}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-logo{font-family:var(--font-display);font-size:1.4rem;font-weight:600;margin-bottom:1rem}
+.footer-logo span{color:var(--gold)}
+.footer-brand p{font-size:0.82rem;color:var(--text3);line-height:1.65;max-width:260px}
+.footer-col h4{font-size:0.72rem;font-family:var(--font-mono);letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem}
+.footer-col li a{font-size:0.85rem;color:var(--text2);transition:color 0.15s}
+.footer-col li a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:2rem;display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--text3);font-family:var(--font-mono);flex-wrap:wrap;gap:1rem}
+.footer-disclaimer{padding:1.5rem 0;border-top:1px solid var(--border);font-size:0.7rem;color:var(--text3);font-family:var(--font-mono);line-height:1.7}
+
+@media(max-width:900px){.nav-links{display:none}.articles-layout{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr 1fr}.newsletter-form{flex-direction:column}}
+@media(max-width:600px){.footer-grid{grid-template-columns:1fr}.article-card{flex-direction:column!important}.article-img{width:100%!important;border-right:none!important;border-bottom:1px solid var(--border)!important}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Capital<span>Edge</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/pages/markets.html">Markets</a></li>
+    <li><a href="/pages/news.html">News</a></li>
+    <li><a href="/pages/tools.html">Tools</a></li>
+    <li><a href="/pages/ai.html">AI Analyst</a></li>
+    <li><a href="/pages/affiliate.html">Resources</a></li>
+  </ul>
+  <a href="#newsletter" class="nav-cta">Free Newsletter</a>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker-inner">
+    <div class="ticker-item"><span class="sym">S&P 500</span><span class="price">Loading...</span></div>
+  </div>
+</div>
+
+<!-- MARKET STATUS -->
+<div class="market-status-bar">
+  <div class="status-item"><div class="status-dot" id="market-dot"></div><span class="status-label">Market</span><span class="status-val" id="market-status-val">—</span></div>
+  <div class="status-item"><span class="status-label">SPY</span><span class="status-val" id="spy-val">—</span></div>
+  <div class="status-item"><span class="status-label">QQQ</span><span class="status-val" id="qqq-val">—</span></div>
+  <div class="status-item"><span class="status-label">Fear &amp; Greed</span><span class="status-val" id="fg-status">—</span></div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><span class="dot">●</span> Market Intelligence · Updated in Real-Time</div>
+  <h1>Invest with<br><em>Precision.</em><br>Build Real Wealth.</h1>
+  <p>Institutional-grade market data, AI-powered analysis, and actionable strategies for independent investors.</p>
+  <div class="hero-actions">
+    <a href="#newsletter" class="btn-primary">Get Free Newsletter</a>
+    <a href="/pages/markets.html" class="btn-secondary">Live Markets →</a>
+  </div>
+</section>
+
+<!-- AD -->
+<div class="container"><div class="ad-zone ad-leaderboard">728×90 — Replace with Google AdSense</div></div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num">120K+</div><div class="stat-label">Active Readers</div></div>
+      <div class="stat-item"><div class="stat-num">Real-Time</div><div class="stat-label">Market Data</div></div>
+      <div class="stat-item"><div class="stat-num">AI</div><div class="stat-label">Stock Analysis</div></div>
+      <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">Free Calculators</div></div>
+      <div class="stat-item"><div class="stat-num">Free</div><div class="stat-label">Always Free</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS + SIDEBAR -->
+<section class="articles-section" id="analysis">
+  <div class="container">
+    <div class="section-label">Live Market News</div>
+    <h2 class="section-title">What the <em>Smart Money</em> Is Watching</h2>
+    <div class="news-tabs">
+      <div class="news-tab active" data-topic="investing">📊 Investing</div>
+      <div class="news-tab" data-topic="macro">🏦 Macro</div>
+      <div class="news-tab" data-topic="crypto">₿ Crypto</div>
+      <div class="news-tab" data-topic="earnings">📈 Earnings</div>
+    </div>
+    <div class="articles-layout">
+      <div class="articles-main">
+        <div id="articles-loader"><div class="spinner"></div><div class="loading-text">Loading latest news...</div></div>
+        <div id="articles-container" style="display:none;flex-direction:column;gap:1.25rem;"></div>
+        <div class="ad-zone ad-inline">300×90 Inline Ad — Replace with AdSense</div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-widget">
+          <div class="widget-header">Market Movers <span class="live-dot">Live</span></div>
+          <div class="movers-list" id="movers-list"><div class="spinner" style="width:20px;height:20px;margin:1rem auto;"></div></div>
+        </div>
+        <div class="sidebar-widget">
+          <div class="widget-header">Fear &amp; Greed Index</div>
+          <div class="fg-widget">
+            <svg viewBox="0 0 140 70" style="width:140px;height:70px;margin:0 auto 1rem;display:block;">
+              <path d="M 10 70 A 60 60 0 0 1 130 70" fill="none" stroke="#1e2d40" stroke-width="12" stroke-linecap="round"/>
+              <path id="fg-arc" d="M 10 70 A 60 60 0 0 1 130 70" fill="none" stroke="#c9a84c" stroke-width="12" stroke-linecap="round" style="stroke-dasharray:220;stroke-dashoffset:110;transition:stroke-dashoffset 1s ease;"/>
+            </svg>
+            <div class="fg-value" id="fg-value">—</div>
+            <div class="fg-label" id="fg-label">Loading...</div>
+          </div>
+        </div>
+        <div class="ad-zone ad-sidebar">300×250 — Replace with AdSense</div>
+        <div class="sidebar-widget" style="padding:1.5rem;">
+          <div style="font-family:var(--font-display);font-size:1.3rem;margin-bottom:0.5rem;">Free Weekly Brief</div>
+          <div style="font-size:0.8rem;color:var(--text2);margin-bottom:1rem;">5 market moves + 1 trade idea every Monday.</div>
+          <input id="sidebar-email" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0.7rem 1rem;color:var(--text);font-family:var(--font-sans);font-size:0.85rem;outline:none;margin-bottom:0.6rem;" placeholder="your@email.com" />
+          <button class="btn-primary" style="width:100%;padding:0.7rem;" onclick="handleSignup('sidebar-email')">Subscribe Free</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AFFILIATE -->
+<section class="affiliate-section">
+  <div class="container">
+    <div class="section-label">Recommended Platforms</div>
+    <h2 class="section-title">Tools We <em>Actually Use</em></h2>
+    <p style="color:var(--text2);margin-top:0.75rem;max-width:540px;">Vetted platforms we trust. Some links are affiliate — we earn a small commission at no cost to you.</p>
+    <div class="aff-grid">
+      <a href="YOUR_IBKR_AFFILIATE_LINK" target="_blank" class="aff-card"><span class="aff-icon">📊</span><div class="aff-name">Interactive Brokers</div><div class="aff-desc">Industry-lowest margin rates, global market access, and pro-grade tools.</div><span class="aff-cta">Open Account →</span></a>
+      <a href="YOUR_SEEKING_ALPHA_AFFILIATE_LINK" target="_blank" class="aff-card"><span class="aff-icon">🔬</span><div class="aff-name">Seeking Alpha</div><div class="aff-desc">Quant ratings, earnings analysis, and 10,000+ expert contributors.</div><span class="aff-cta">Try Free →</span></a>
+      <a href="YOUR_M1_AFFILIATE_LINK" target="_blank" class="aff-card"><span class="aff-icon">🤖</span><div class="aff-name">M1 Finance</div><div class="aff-desc">Custom portfolios with auto-rebalancing. Zero management fees.</div><span class="aff-cta">Start Investing →</span></a>
+      <a href="YOUR_COINBASE_AFFILIATE_LINK" target="_blank" class="aff-card"><span class="aff-icon">₿</span><div class="aff-name">Coinbase</div><div class="aff-desc">Most trusted crypto platform. $10 sign-up bonus for new users.</div><span class="aff-cta">Get $10 Bonus →</span></a>
+      <a href="/pages/ai.html" class="aff-card"><span class="aff-icon">🧠</span><div class="aff-name">AI Stock Analyst</div><div class="aff-desc">Get instant AI-powered analysis on any stock. Completely free.</div><span class="aff-cta">Try It Free →</span></a>
+      <a href="/pages/tools.html" class="aff-card"><span class="aff-icon">🧮</span><div class="aff-name">Free Calculators</div><div class="aff-desc">Compound returns, DCA simulator, retirement planner, and more.</div><span class="aff-cta">Open Tools →</span></a>
+    </div>
+    <div class="aff-disclaimer">* Affiliate disclosure: CapitalEdge may earn a commission when you open accounts through the links above.</div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section" id="newsletter">
+  <div class="container">
+    <div class="newsletter-box">
+      <div class="section-label" style="justify-content:center;">Free Intelligence</div>
+      <h2>The <em>CapitalEdge</em> Weekly Brief</h2>
+      <p>120,000+ subscribers receive five market insights and one trade idea every Monday. Free, always.</p>
+      <div class="newsletter-form">
+        <input type="email" id="main-email" placeholder="Enter your email address" />
+        <button onclick="handleSignup('main-email')">Subscribe →</button>
+      </div>
+      <div class="nl-note">No spam. Unsubscribe anytime. Your data is never sold.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER AD -->
+<div class="container"><div class="ad-zone ad-leaderboard">728×90 Footer Ad — Replace with Google AdSense</div></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="footer-logo">Capital<span>Edge</span></div><p>Independent financial analysis and investment intelligence for serious investors.</p></div>
+      <div class="footer-col"><h4>Pages</h4><ul><li><a href="/">Home</a></li><li><a href="/pages/markets.html">Markets</a></li><li><a href="/pages/news.html">News</a></li><li><a href="/pages/tools.html">Tools</a></li><li><a href="/pages/ai.html">AI Analyst</a></li></ul></div>
+      <div class="footer-col"><h4>Topics</h4><ul><li><a href="#">Equities</a></li><li><a href="#">Crypto</a></li><li><a href="#">ETFs</a></li><li><a href="#">Macro</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">Disclaimer</a></li><li><a href="#">Advertise</a></li></ul></div>
+    </div>
+    <div class="footer-disclaimer">DISCLAIMER: CapitalEdge provides financial information for educational purposes only. Nothing on this site constitutes financial advice. Investing involves risk. CapitalEdge may earn affiliate commissions from links on this site.</div>
+    <div class="footer-bottom"><span>© 2025 CapitalEdge Media LLC. All rights reserved.</span><span>Built for serious investors.</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// UTILS
+function fmtPrice(n,d=2){if(!n&&n!==0)return'—';return new Intl.NumberFormat('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n)}
+function fmtPct(n){if(!n&&n!==0)return'—';return(n>=0?'+':'')+n.toFixed(2)+'%'}
+function chgClass(n){return n>=0?'up':'dn'}
+function chgArrow(n){return n>=0?'▲':'▼'}
+function fmtDate(iso){return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function timeAgo(iso){const d=(Date.now()-new Date(iso))/1000;if(d<3600)return Math.floor(d/60)+'m ago';if(d<86400)return Math.floor(d/3600)+'h ago';return Math.floor(d/86400)+'d ago'}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+async function apiFetch(url){const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+
+// LOAD TICKER
+async function loadTicker(){
+  try{
+    const data=await apiFetch('/api/quotes');
+    const q=data.quotes||[];
+    const items=q.map(x=>`<div class="ticker-item"><span class="sym">${x.symbol}</span><span class="price">${fmtPrice(x.price)}</span><span class="chg ${chgClass(x.changePercent)}">${chgArrow(x.changePercent)} ${Math.abs(x.changePercent||0).toFixed(2)}%</span></div>`).join('');
+    document.getElementById('ticker-inner').innerHTML=items+items;
+  }catch(e){}
+}
+
+// LOAD MOVERS
+async function loadMovers(){
+  try{
+    const data=await apiFetch('/api/quotes');
+    const q=data.quotes||[];
+    const sorted=[...q].sort((a,b)=>Math.abs(b.changePercent)-Math.abs(a.changePercent)).slice(0,6);
+    document.getElementById('movers-list').innerHTML=sorted.map(x=>`
+      <div class="mover-row">
+        <div><div class="mover-sym">${x.symbol}</div></div>
+        <div><div class="mover-price">${fmtPrice(x.price)}</div><div class="mover-pct ${chgClass(x.changePercent)}">${chgArrow(x.changePercent)} ${Math.abs(x.changePercent||0).toFixed(2)}%</div></div>
+      </div>`).join('');
+    const spy=q.find(x=>x.symbol==='SPY');
+    const qqq=q.find(x=>x.symbol==='QQQ');
+    if(spy)document.getElementById('spy-val').innerHTML=`<span class="${chgClass(spy.changePercent)}">${fmtPrice(spy.price)} ${fmtPct(spy.changePercent)}</span>`;
+    if(qqq)document.getElementById('qqq-val').innerHTML=`<span class="${chgClass(qqq.changePercent)}">${fmtPrice(qqq.price)} ${fmtPct(qqq.changePercent)}</span>`;
+  }catch(e){}
+}
+
+// LOAD MARKET OVERVIEW
+async function loadOverview(){
+  try{
+    const data=await apiFetch('/api/market-overview');
+    const dot=document.getElementById('market-dot');
+    const val=document.getElementById('market-status-val');
+    if(data.marketStatus==='open'){dot.classList.remove('closed');val.textContent='OPEN';val.style.color='var(--green)'}
+    else{dot.classList.add('closed');val.textContent='CLOSED';val.style.color='var(--red)'}
+    const fg=data.fearGreed;
+    document.getElementById('fg-value').textContent=fg.value;
+    document.getElementById('fg-label').textContent=fg.label;
+    document.getElementById('fg-status').innerHTML=`<span style="color:${fg.value>60?'var(--green)':fg.value<40?'var(--red)':'var(--gold)'}">${fg.value} — ${fg.label}</span>`;
+    const arc=document.getElementById('fg-arc');
+    arc.style.strokeDashoffset=220-(fg.value/100)*220;
+    arc.style.stroke=fg.value>60?'var(--green)':fg.value<40?'var(--red)':'var(--gold)';
+  }catch(e){}
+}
+
+// LOAD NEWS
+async function loadNews(topic){
+  const loader=document.getElementById('articles-loader');
+  const container=document.getElementById('articles-container');
+  loader.style.display='flex';container.style.display='none';
+  try{
+    const data=await apiFetch('/api/news?topic='+topic);
+    const articles=data.articles||[];
+    container.innerHTML=articles.slice(0,6).map((a,i)=>`
+      <div class="article-card ${i===0?'featured':''}" onclick="window.open('${a.url}','_blank')">
+        <div class="article-img">${a.urlToImage?`<img src="${a.urlToImage}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=article-img-ph>📈</div>'" />`:'<div class="article-img-ph">📈</div>'}</div>
+        <div class="article-body">
+          <div class="article-tag">${a.source||'Finance'}</div>
+          <div class="article-title">${a.title||''}</div>
+          <div class="article-excerpt">${a.description||''}</div>
+          <div class="article-meta"><span>${fmtDate(a.publishedAt)}</span><span>·</span><span>${timeAgo(a.publishedAt)}</span></div>
+        </div>
+      </div>`).join('');
+    loader.style.display='none';container.style.display='flex';
+  }catch(e){
+    loader.innerHTML='<div class="loading-text">Could not load news. Check NEWS_API_KEY.</div>';
+  }
+}
+
+// NEWS TABS
+document.querySelectorAll('.news-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.news-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    loadNews(tab.dataset.topic);
+  });
+});
+
+// NEWSLETTER
+function handleSignup(id){
+  const email=document.getElementById(id).value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email address.');return}
+  showToast('✅ You\'re subscribed! Welcome to CapitalEdge.');
+  document.getElementById(id).value='';
+}
+
+// INIT
+loadTicker();loadMovers();loadOverview();loadNews('investing');
+setInterval(()=>{loadMovers();loadOverview();},60000);
+</script>
+</body>
+</html>
