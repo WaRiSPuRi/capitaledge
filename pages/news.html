@@ -137,7 +137,7 @@ function renderArticles(reset){
   if(reset)document.getElementById('news-grid').innerHTML='';
   batch.forEach((a,i)=>{
     const card=document.createElement('div');
-    card.className='news-card';card.onclick=()=>window.open(a.url,'_blank');
+    card.className='news-card';card.onclick=()=>openArticle(a);
     const isFirst=reset&&i===0;
     card.innerHTML=`<div class="news-img">${a.urlToImage?`<img src="${a.urlToImage}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=news-img-ph>📰</div>'" />`:'<div class="news-img-ph">📰</div>'}</div><div class="news-body"><div class="news-source">${a.source||'Finance'}</div><div class="news-title">${a.title||''}</div>${isFirst?`<div class="news-desc">${a.description||''}</div>`:''}<div class="news-meta"><span>${fmtDate(a.publishedAt)}</span><span>·</span><span>${timeAgo(a.publishedAt)}</span></div></div>`;
     document.getElementById('news-grid').appendChild(card);
@@ -146,6 +146,14 @@ function renderArticles(reset){
   document.getElementById('load-more').style.display=shownCount<allArticles.length?'block':'none';
 }
 function loadMore(){renderArticles(false)}
+function openArticle(a){
+  const p=new URLSearchParams({
+    title:a.title||'',desc:a.description||'',url:a.url||'',
+    source:a.source||'Finance',date:a.publishedAt||'',
+    image:a.urlToImage||'',topic:document.querySelector('.filter-btn.active')?.dataset.topic||'investing'
+  });
+  window.location.href='/pages/article.html?'+p.toString();
+}
 function subscribeNewsletter(){
   const email=document.getElementById('news-email').value.trim();
   if(!email||!email.includes('@')){showToast('Enter a valid email');return}
