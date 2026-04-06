@@ -410,7 +410,7 @@ async function loadNews(topic){
     const data=await apiFetch('/api/news?topic='+topic);
     const articles=data.articles||[];
     container.innerHTML=articles.slice(0,6).map((a,i)=>`
-      <div class="article-card ${i===0?'featured':''}" onclick="window.open('${a.url}','_blank')">
+      <div class="article-card ${i===0?'featured':''}" onclick="openArticle(a)">
         <div class="article-img">${a.urlToImage?`<img src="${a.urlToImage}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=article-img-ph>📈</div>'" />`:'<div class="article-img-ph">📈</div>'}</div>
         <div class="article-body">
           <div class="article-tag">${a.source||'Finance'}</div>
