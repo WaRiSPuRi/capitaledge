@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Article — CapitalEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080b0f;--bg2:#0d1117;--surface:#141c26;--surface2:#1a2535;--border:#1e2d40;--gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,0.1);--text:#e8edf2;--text2:#8fa3b8;--text3:#4d6478;--red:#ef4444;--green:#22c55e;--font-display:'Cormorant Garamond',serif;--font-sans:'Syne',sans-serif;--font-mono:'DM Mono',monospace}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);overflow-x:hidden}a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;background:rgba(8,11,15,0.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;font-weight:600}.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+.nav-links a{color:var(--text2);transition:color 0.2s}.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#080b0f;padding:0.5rem 1.2rem;border-radius:3px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+
+.page-wrap{padding-top:68px}
+.container{max-width:1200px;margin:0 auto;padding:0 5%}
+.article-wrap{display:grid;grid-template-columns:1fr 300px;gap:3rem;padding:3rem 0 5rem}
+
+/* ARTICLE */
+.article-main{}
+.back-btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:2rem;cursor:pointer;transition:color 0.2s;background:none;border:none;padding:0}
+.back-btn:hover{color:var(--gold)}
+.article-tag{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block}
+.article-headline{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:1.25rem;animation:fadeUp 0.5s ease both}
+.article-meta-bar{display:flex;align-items:center;gap:1.5rem;padding:1rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:2rem;flex-wrap:wrap}
+.meta-source{font-family:var(--font-mono);font-size:0.75rem;color:var(--gold);letter-spacing:0.06em}
+.meta-date{font-family:var(--font-mono);font-size:0.72rem;color:var(--text3)}
+.meta-link{font-family:var(--font-mono);font-size:0.72rem;color:var(--text3);display:flex;align-items:center;gap:0.3rem;margin-left:auto;transition:color 0.2s}
+.meta-link:hover{color:var(--gold)}
+.article-image{width:100%;max-height:420px;object-fit:cover;border-radius:8px;margin-bottom:2rem;border:1px solid var(--border);opacity:0.9}
+.article-description{font-size:1.15rem;color:var(--text2);line-height:1.8;margin-bottom:2rem;font-family:var(--font-display);font-weight:300;border-left:3px solid var(--gold);padding-left:1.5rem}
+.article-body-text{font-size:0.95rem;color:var(--text2);line-height:1.85;margin-bottom:2rem}
+.article-body-text p{margin-bottom:1.25rem}
+
+/* PAYWALL NOTICE */
+.paywall-notice{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem;text-align:center;margin:2rem 0}
+.paywall-icon{font-size:2.5rem;margin-bottom:1rem}
+.paywall-title{font-family:var(--font-display);font-size:1.4rem;margin-bottom:0.5rem}
+.paywall-text{font-size:0.85rem;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.read-full-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold);color:#080b0f;padding:0.85rem 2rem;border-radius:3px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;transition:background 0.2s}
+.read-full-btn:hover{background:var(--gold2)}
+
+/* AD ZONES */
+.ad-zone{background:var(--surface);border:1px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--text3)}
+.ad-inline{width:100%;height:100px;margin:2rem 0}
+.ad-sidebar{width:100%;height:250px;margin-bottom:1.5rem}
+
+/* RELATED ARTICLES */
+.related-section{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+.related-title{font-family:var(--font-display);font-size:1.5rem;font-weight:300;margin-bottom:1.5rem}
+.related-title em{font-style:italic;color:var(--gold)}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.related-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:all 0.2s}
+.related-card:hover{border-color:rgba(201,168,76,0.3);transform:translateY(-2px)}
+.related-img{width:100%;height:130px;object-fit:cover;opacity:0.85;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:2rem}
+.related-img img{width:100%;height:100%;object-fit:cover}
+.related-body{padding:0.85rem 1rem}
+.related-source{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem}
+.related-headline{font-family:var(--font-display);font-size:1rem;line-height:1.3;margin-bottom:0.4rem}
+.related-date{font-family:var(--font-mono);font-size:0.65rem;color:var(--text3)}
+
+/* SIDEBAR */
+.article-sidebar{display:flex;flex-direction:column;gap:1.5rem}
+.sidebar-widget{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.widget-header{padding:0.9rem 1.25rem;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3)}
+.widget-body{padding:1.25rem}
+
+/* SHARE BUTTONS */
+.share-buttons{display:flex;gap:0.5rem;flex-wrap:wrap;padding:1.25rem}
+.share-btn{flex:1;padding:0.6rem;border-radius:4px;font-size:0.72rem;font-family:var(--font-mono);letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all 0.2s;text-align:center;min-width:80px}
+.share-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* NEWSLETTER */
+.nl-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0.7rem 1rem;color:var(--text);font-family:var(--font-sans);font-size:0.85rem;outline:none;margin-bottom:0.6rem;transition:border-color 0.2s}
+.nl-input:focus{border-color:var(--gold)}
+.btn-primary{background:var(--gold);color:#080b0f;padding:0.7rem;border-radius:4px;font-weight:700;font-size:0.82rem;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;width:100%;transition:background 0.2s}
+.btn-primary:hover{background:var(--gold2)}
+
+/* LOADING */
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:3rem auto}
+.loading-text{text-align:center;color:var(--text3);font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.1em;margin-top:0.5rem}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface2);border:1px solid var(--gold);border-radius:6px;padding:1rem 1.5rem;font-size:0.85rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 0;text-align:center;font-family:var(--font-mono);font-size:0.72rem;color:var(--text3)}
+
+@media(max-width:900px){.nav-links{display:none}.article-wrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">Capital<span>Edge</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/pages/markets.html">Markets</a></li>
+    <li><a href="/pages/news.html">News</a></li>
+    <li><a href="/pages/tools.html">Tools</a></li>
+    <li><a href="/pages/ai.html">AI Analyst</a></li>
+    <li><a href="/pages/affiliate.html">Resources</a></li>
+  </ul>
+  <a href="/#newsletter" class="nav-cta">Free Newsletter</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="container">
+    <div class="article-wrap">
+
+      <!-- MAIN ARTICLE -->
+      <div class="article-main" id="article-main">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading article...</div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="article-sidebar">
+        <div class="ad-zone ad-sidebar">300×250 — Replace with AdSense</div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-header">Share This Article</div>
+          <div class="share-buttons">
+            <div class="share-btn" onclick="shareArticle('twitter')">𝕏 Twitter</div>
+            <div class="share-btn" onclick="shareArticle('linkedin')">LinkedIn</div>
+            <div class="share-btn" onclick="shareArticle('copy')">Copy Link</div>
+          </div>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="sidebar-widget">
+          <div class="widget-header">Free Weekly Brief</div>
+          <div class="widget-body">
+            <div style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem;line-height:1.55;">Get the top 5 market stories every Monday. Free forever.</div>
+            <input class="nl-input" id="sidebar-email" placeholder="your@email.com"/>
+            <button class="btn-primary" onclick="subscribe()">Subscribe Free</button>
+          </div>
+        </div>
+
+        <!-- Affiliate -->
+        <div class="sidebar-widget" style="padding:1.5rem;">
+          <div style="font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.75rem;">Sponsored</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:0.4rem;">Trade Smarter</div>
+          <div style="font-size:0.78rem;color:var(--text2);margin-bottom:1rem;line-height:1.5;">Open an Interactive Brokers account and access 150+ global markets with the lowest margin rates in the industry.</div>
+          <a href="YOUR_IBKR_AFFILIATE_LINK" target="_blank" class="btn-primary" style="display:block;text-align:center;text-decoration:none;padding:0.7rem;">Open Account →</a>
+        </div>
+
+        <div class="ad-zone" style="height:200px;">300×200 — Replace with AdSense</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer><div class="container">© 2025 CapitalEdge Media LLC · <a href="/" style="color:var(--gold)">Home</a></div></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function fmtDate(iso){return new Date(iso).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}
+
+// Get article data from URL params
+const params=new URLSearchParams(window.location.search);
+const article={
+  title: decodeURIComponent(params.get('title')||''),
+  description: decodeURIComponent(params.get('desc')||''),
+  url: decodeURIComponent(params.get('url')||''),
+  source: decodeURIComponent(params.get('source')||'Finance News'),
+  date: decodeURIComponent(params.get('date')||new Date().toISOString()),
+  image: decodeURIComponent(params.get('image')||''),
+  topic: decodeURIComponent(params.get('topic')||'investing')
+};
+
+// Update page title
+document.title = (article.title||'Article') + ' — CapitalEdge';
+
+// Render article
+function renderArticle(){
+  const main = document.getElementById('article-main');
+
+  main.innerHTML = `
+    <button class="back-btn" onclick="history.back()">← Back to News</button>
+    <span class="article-tag">${article.source}</span>
+    <h1 class="article-headline">${article.title||'Article'}</h1>
+    <div class="article-meta-bar">
+      <span class="meta-source">${article.source}</span>
+      <span class="meta-date">${fmtDate(article.date)}</span>
+      <a href="${article.url}" target="_blank" rel="noopener" class="meta-link">Read on ${article.source} ↗</a>
+    </div>
+    ${article.image ? `<img class="article-image" src="${article.image}" alt="${article.title}" onerror="this.style.display='none'" />` : ''}
+    ${article.description ? `<div class="article-description">${article.description}</div>` : ''}
+    <div class="ad-zone ad-inline">728×90 Inline Ad — Replace with AdSense</div>
+    <div class="article-body-text">
+      <p>This article was originally published by <strong>${article.source}</strong>. CapitalEdge surfaces the most relevant financial news from across the web to keep you informed on the markets that matter.</p>
+      <p>The excerpt above summarizes the key points of this story. To read the full article including all details, quotes, and data, click the link below.</p>
+    </div>
+    <div class="paywall-notice">
+      <div class="paywall-icon">📰</div>
+      <div class="paywall-title">Continue Reading on ${article.source}</div>
+      <div class="paywall-text">This article is hosted on ${article.source}. Click below to read the full story including all quotes, data, and analysis.</div>
+      <a href="${article.url}" target="_blank" rel="noopener" class="read-full-btn">Read Full Article on ${article.source} →</a>
+    </div>
+    <div id="related-section"></div>
+  `;
+
+  // Load related articles
+  loadRelated();
+}
+
+async function loadRelated(){
+  try{
+    const data = await fetch('/api/news?topic='+article.topic).then(r=>r.json());
+    const articles = (data.articles||[]).filter(a=>a.url!==article.url).slice(0,3);
+    if(!articles.length) return;
+    document.getElementById('related-section').innerHTML = `
+      <div class="related-section">
+        <div class="related-title"><em>Related</em> Articles</div>
+        <div class="related-grid">
+          ${articles.map(a=>`
+            <div class="related-card" onclick="openArticle(${JSON.stringify(a).replace(/"/g,'&quot;')})">
+              <div class="related-img">${a.urlToImage?`<img src="${a.urlToImage}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='📰'" />`:'📰'}</div>
+              <div class="related-body">
+                <div class="related-source">${a.source||'Finance'}</div>
+                <div class="related-headline">${a.title||''}</div>
+                <div class="related-date">${fmtDate(a.publishedAt)}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }catch(e){}
+}
+
+function openArticle(a){
+  const p=new URLSearchParams({
+    title: a.title||'',
+    desc: a.description||'',
+    url: a.url||'',
+    source: a.source||'Finance',
+    date: a.publishedAt||'',
+    image: a.urlToImage||'',
+    topic: article.topic
+  });
+  window.location.href='/pages/article.html?'+p.toString();
+}
+
+function shareArticle(platform){
+  const url=encodeURIComponent(window.location.href);
+  const title=encodeURIComponent(article.title);
+  if(platform==='twitter') window.open('https://twitter.com/intent/tweet?text='+title+'&url='+url,'_blank');
+  else if(platform==='linkedin') window.open('https://www.linkedin.com/sharing/share-offsite/?url='+url,'_blank');
+  else if(platform==='copy'){navigator.clipboard.writeText(window.location.href).then(()=>showToast('✅ Link copied to clipboard!'));}
+}
+
+function subscribe(){
+  const email=document.getElementById('sidebar-email').value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email');return}
+  showToast('✅ Subscribed! Welcome to CapitalEdge.');
+  document.getElementById('sidebar-email').value='';
+}
+
+// Init
+if(article.title) renderArticle();
+else { document.getElementById('article-main').innerHTML='<div style="text-align:center;padding:3rem;color:var(--text3);font-family:var(--font-mono);">Article not found. <a href="/pages/news.html" style="color:var(--gold)">← Back to News</a></div>'; }
+</script>
+</body>
+</html>
