@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Free Financial Tools — CapitalEdge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080b0f;--bg2:#0d1117;--surface:#141c26;--surface2:#1a2535;--border:#1e2d40;--gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,0.1);--text:#e8edf2;--text2:#8fa3b8;--text3:#4d6478;--red:#ef4444;--green:#22c55e;--font-display:'Cormorant Garamond',serif;--font-sans:'Syne',sans-serif;--font-mono:'DM Mono',monospace}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);font-family:var(--font-sans);overflow-x:hidden}a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes spin{to{transform:rotate(360deg)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;background:rgba(8,11,15,0.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;font-weight:600}.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase}
+.nav-links a{color:var(--text2);transition:color 0.2s}.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#080b0f;padding:0.5rem 1.2rem;border-radius:3px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase}
+.page-wrap{padding-top:68px}
+.container{max-width:1200px;margin:0 auto;padding:0 5%}
+.section-label{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.75rem}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--gold)}
+.page-hero{padding:4rem 0 2rem;border-bottom:1px solid var(--border)}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:300}
+.page-hero h1 em{font-style:italic;color:var(--gold)}
+.tools-layout{display:grid;grid-template-columns:220px 1fr;gap:2rem;padding:3rem 0 5rem}
+.tools-nav{display:flex;flex-direction:column;gap:0.4rem;position:sticky;top:90px;height:fit-content}
+.tool-nav-item{padding:0.7rem 1rem;border-radius:6px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.6rem;color:var(--text2);border:1px solid transparent}
+.tool-nav-item:hover,.tool-nav-item.active{background:var(--gold-dim);border-color:rgba(201,168,76,0.2);color:var(--gold)}
+.tool-panel{display:none}.tool-panel.active{display:block;animation:fadeUp 0.3s ease}
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:2rem}
+.tool-card h2{font-family:var(--font-display);font-size:1.8rem;font-weight:300;margin-bottom:0.4rem}
+.tool-card h2 em{font-style:italic;color:var(--gold)}
+.tool-card>p{font-size:0.85rem;color:var(--text2);margin-bottom:1.75rem}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-group label{font-size:0.75rem;font-family:var(--font-mono);letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)}
+.form-group input,.form-group select{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;color:var(--text);font-family:var(--font-mono);font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold)}
+.btn-primary{background:var(--gold);color:#080b0f;padding:0.85rem 2rem;border-radius:3px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:var(--gold2)}
+.result-box{background:linear-gradient(135deg,var(--surface),var(--bg));border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:1.5rem 2rem;margin-top:1.5rem}
+.result-main{font-family:var(--font-display);font-size:2.8rem;font-weight:600;color:var(--gold);line-height:1}
+.result-label{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.5rem}
+.result-breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.result-item .val{font-family:var(--font-mono);font-size:0.95rem;font-weight:500}
+.result-item .lbl{font-family:var(--font-mono);font-size:0.68rem;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-top:0.2rem}
+.tool-chart-wrap{position:relative;height:220px;margin-top:1.5rem}
+.ad-zone{background:var(--surface);border:1px dashed var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.7rem;color:var(--text3)}
+.ad-sidebar{width:100%;height:250px;margin-top:1rem}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 0;text-align:center;font-family:var(--font-mono);font-size:0.72rem;color:var(--text3)}
+@media(max-width:900px){.nav-links{display:none}.tools-layout{grid-template-columns:1fr}.tools-nav{flex-direction:row;overflow-x:auto;position:static}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">Capital<span>Edge</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/pages/markets.html">Markets</a></li>
+    <li><a href="/pages/news.html">News</a></li>
+    <li><a href="/pages/tools.html" class="active">Tools</a></li>
+    <li><a href="/pages/ai.html">AI Analyst</a></li>
+    <li><a href="/pages/affiliate.html">Resources</a></li>
+  </ul>
+  <a href="/#newsletter" class="nav-cta">Free Newsletter</a>
+</nav>
+<div class="page-wrap">
+  <div class="page-hero"><div class="container"><div class="section-label">Free Calculators</div><h1>Your <em>Investing</em> Toolkit</h1><p style="color:var(--text2);margin-top:0.75rem;">Professional-grade calculators. Free, no sign-up required.</p></div></div>
+  <div class="container">
+    <div class="tools-layout">
+      <div class="tools-nav">
+        <div class="tool-nav-item active" data-tool="compound" onclick="switchTool('compound')">🧮 Compound Growth Calculator</div>
+        <div class="tool-nav-item" data-tool="dca" onclick="switchTool('dca')">🔄 Dollar-Cost Averaging Sim</div>
+        <div class="tool-nav-item" data-tool="retirement" onclick="switchTool('retirement')">🏖️ Retirement Goal Planner</div>
+        <div class="tool-nav-item" data-tool="drip" onclick="switchTool('drip')">💰 Dividend Reinvestment (DRIP)</div>
+        <div class="tool-nav-item" data-tool="options" onclick="switchTool('options')">⚡ Options Profit & Loss Calc</div>
+        <div class="tool-nav-item" data-tool="drawdown" onclick="switchTool('drawdown')">📉 Portfolio Drawdown Analyzer</div>
+        <div class="ad-zone ad-sidebar">300×250<br/>AdSense</div>
+      </div>
+      <div>
+        <!-- COMPOUND -->
+        <div class="tool-panel active" id="tool-compound">
+          <div class="tool-card">
+            <h2><em>Compound</em> Growth Calculator</h2>
+            <p>Discover how your investments grow exponentially over time. Enter your initial investment, monthly contributions, expected annual return, and time horizon to see your final portfolio value, total gains, and money multiplier. This is the most important concept in investing — start early and let compounding do the work.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Initial Investment ($)</label><input type="number" id="ci-principal" value="10000" min="0"/></div>
+              <div class="form-group"><label>Monthly Contribution ($)</label><input type="number" id="ci-monthly" value="500" min="0"/></div>
+              <div class="form-group"><label>Annual Return (%)</label><input type="number" id="ci-rate" value="10" step="0.1"/></div>
+              <div class="form-group"><label>Time Period (Years)</label><input type="number" id="ci-years" value="20" min="1" max="50"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcCompound()">Calculate →</button>
+            <div class="result-box" id="ci-result" style="display:none">
+              <div class="result-label">Final Portfolio Value</div>
+              <div class="result-main" id="ci-final">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="ci-invested">—</div><div class="lbl">Total Invested</div></div>
+                <div class="result-item"><div class="val" id="ci-gain">—</div><div class="lbl">Investment Gains</div></div>
+                <div class="result-item"><div class="val" id="ci-mult">—</div><div class="lbl">Money Multiplier</div></div>
+              </div>
+              <div class="tool-chart-wrap"><canvas id="ci-chart"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <!-- DCA -->
+        <div class="tool-panel" id="tool-dca">
+          <div class="tool-card">
+            <h2><em>Dollar-Cost Averaging</em> Simulator</h2>
+            <p>Dollar-cost averaging (DCA) means investing a fixed amount at regular intervals regardless of price — buying more shares when prices are low and fewer when high. This strategy reduces the impact of volatility and removes the stress of trying to time the market. See how consistent monthly investing compounds into significant wealth over time.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Monthly Investment ($)</label><input type="number" id="dca-amount" value="200" min="1"/></div>
+              <div class="form-group"><label>Investment Period (Years)</label><input type="number" id="dca-years" value="10" min="1" max="40"/></div>
+              <div class="form-group"><label>Expected Annual Return (%)</label><input type="number" id="dca-return" value="10" step="0.5"/></div>
+              <div class="form-group"><label>Starting Lump Sum ($)</label><input type="number" id="dca-lump" value="0" min="0"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcDCA()">Simulate →</button>
+            <div class="result-box" id="dca-result" style="display:none">
+              <div class="result-label">End Portfolio Value</div>
+              <div class="result-main" id="dca-final">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="dca-contributed">—</div><div class="lbl">Total Contributed</div></div>
+                <div class="result-item"><div class="val" id="dca-gains">—</div><div class="lbl">Total Gains</div></div>
+                <div class="result-item"><div class="val" id="dca-roi">—</div><div class="lbl">ROI</div></div>
+              </div>
+              <div class="tool-chart-wrap"><canvas id="dca-chart"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <!-- RETIREMENT -->
+        <div class="tool-panel" id="tool-retirement">
+          <div class="tool-card">
+            <h2><em>Retirement</em> Goal Planner</h2>
+            <p>Using the widely-accepted 4% withdrawal rule, this calculator tells you exactly how much you need to retire comfortably. Enter your current age, retirement age, existing savings, and monthly contributions to see if you're on track. If there's a shortfall, the calculator shows you exactly how much extra you need to save each month to close the gap.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Current Age</label><input type="number" id="ret-age" value="30" min="18" max="80"/></div>
+              <div class="form-group"><label>Retirement Age</label><input type="number" id="ret-retire" value="65" min="40" max="80"/></div>
+              <div class="form-group"><label>Current Savings ($)</label><input type="number" id="ret-current" value="25000"/></div>
+              <div class="form-group"><label>Monthly Contribution ($)</label><input type="number" id="ret-monthly" value="800"/></div>
+              <div class="form-group"><label>Expected Return (%)</label><input type="number" id="ret-return" value="8" step="0.5"/></div>
+              <div class="form-group"><label>Desired Monthly Income ($)</label><input type="number" id="ret-income" value="5000"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcRetirement()">Plan Retirement →</button>
+            <div class="result-box" id="ret-result" style="display:none">
+              <div class="result-label">Retirement Nest Egg</div>
+              <div class="result-main" id="ret-final">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="ret-needed">—</div><div class="lbl">Needed (4% Rule)</div></div>
+                <div class="result-item"><div class="val" id="ret-draw">—</div><div class="lbl">Monthly Income</div></div>
+                <div class="result-item"><div class="val" id="ret-years">—</div><div class="lbl">Years to Save</div></div>
+              </div>
+              <div id="ret-verdict" style="margin-top:1.25rem;padding:1rem;border-radius:6px;font-size:0.85rem;"></div>
+            </div>
+          </div>
+        </div>
+        <!-- DRIP -->
+        <div class="tool-panel" id="tool-drip">
+          <div class="tool-card">
+            <h2><em>Dividend Reinvestment</em> (DRIP) Simulator</h2>
+            <p>When you reinvest dividends instead of taking them as cash, you buy more shares which pay more dividends — creating a powerful compounding cycle. This simulator shows you the difference between taking dividends as cash versus reinvesting them, and calculates your annual dividend income in the final year. Dividend reinvestment is one of the most powerful wealth-building strategies available.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Initial Investment ($)</label><input type="number" id="drip-initial" value="10000"/></div>
+              <div class="form-group"><label>Annual Dividend Yield (%)</label><input type="number" id="drip-yield" value="3.5" step="0.1"/></div>
+              <div class="form-group"><label>Dividend Growth Rate (%/yr)</label><input type="number" id="drip-growth" value="5" step="0.5"/></div>
+              <div class="form-group"><label>Stock Appreciation (%/yr)</label><input type="number" id="drip-appreciation" value="7" step="0.5"/></div>
+              <div class="form-group"><label>Years</label><input type="number" id="drip-years" value="20" min="1" max="50"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcDRIP()">Calculate DRIP →</button>
+            <div class="result-box" id="drip-result" style="display:none">
+              <div class="result-label">Portfolio Value with DRIP</div>
+              <div class="result-main" id="drip-final">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="drip-no">—</div><div class="lbl">Without DRIP</div></div>
+                <div class="result-item"><div class="val" id="drip-extra">—</div><div class="lbl">DRIP Advantage</div></div>
+                <div class="result-item"><div class="val" id="drip-div">—</div><div class="lbl">Annual Dividends (Final Year)</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- OPTIONS -->
+        <div class="tool-panel" id="tool-options">
+          <div class="tool-card">
+            <h2><em>Options</em> Profit & Loss Calculator</h2>
+            <p>Options give you the right to buy (call) or sell (put) a stock at a specific price before a set date. This calculator shows your exact profit or loss at expiration based on the stock's final price, your strike price, and the premium you paid. It also calculates your breakeven price and ROI on the premium. Essential for understanding your risk before entering any options trade.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Option Type</label><select id="opt-type"><option value="call">Call Option</option><option value="put">Put Option</option></select></div>
+              <div class="form-group"><label>Stock Price at Expiry ($)</label><input type="number" id="opt-stock" value="150" step="0.01"/></div>
+              <div class="form-group"><label>Strike Price ($)</label><input type="number" id="opt-strike" value="145" step="0.01"/></div>
+              <div class="form-group"><label>Premium Paid ($)</label><input type="number" id="opt-premium" value="3.50" step="0.01"/></div>
+              <div class="form-group"><label>Number of Contracts</label><input type="number" id="opt-contracts" value="1" min="1"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcOptions()">Calculate P&L →</button>
+            <div class="result-box" id="opt-result" style="display:none">
+              <div class="result-label">Net Profit / Loss</div>
+              <div class="result-main" id="opt-pnl">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="opt-intrinsic">—</div><div class="lbl">Intrinsic Value</div></div>
+                <div class="result-item"><div class="val" id="opt-breakeven">—</div><div class="lbl">Breakeven Price</div></div>
+                <div class="result-item"><div class="val" id="opt-roi">—</div><div class="lbl">ROI on Premium</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- DRAWDOWN -->
+        <div class="tool-panel" id="tool-drawdown">
+          <div class="tool-card">
+            <h2><em>Portfolio Drawdown</em> Analyzer</h2>
+            <p>A "drawdown" is the percentage drop from your portfolio's peak value. This tool reveals a critical asymmetry most investors don't know: a 50% loss requires a 100% gain just to break even — not 50%. Enter your portfolio value, the drawdown percentage, and your expected recovery rate to see exactly how long it would take to get back to where you started. Understanding drawdown is essential for risk management.</p>
+            <div class="form-grid">
+              <div class="form-group"><label>Portfolio Value ($)</label><input type="number" id="dd-value" value="100000"/></div>
+              <div class="form-group"><label>Drawdown % (Loss)</label><input type="number" id="dd-pct" value="30" min="1" max="99"/></div>
+              <div class="form-group"><label>Annual Recovery Return (%)</label><input type="number" id="dd-recovery" value="10" step="0.5"/></div>
+            </div>
+            <button class="btn-primary" onclick="calcDrawdown()">Analyze →</button>
+            <div class="result-box" id="dd-result" style="display:none">
+              <div class="result-label">Portfolio After Drawdown</div>
+              <div class="result-main" id="dd-after">—</div>
+              <div class="result-breakdown">
+                <div class="result-item"><div class="val" id="dd-loss">—</div><div class="lbl">Dollar Loss</div></div>
+                <div class="result-item"><div class="val" id="dd-needed">—</div><div class="lbl">Gain Needed to Recover</div></div>
+                <div class="result-item"><div class="val" id="dd-years">—</div><div class="lbl">Years to Recover</div></div>
+              </div>
+              <div id="dd-note" style="margin-top:1rem;font-size:0.82rem;color:var(--text2);line-height:1.6;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer><div class="container">© 2025 CapitalEdge Media LLC · <a href="/" style="color:var(--gold)">Home</a></div></footer>
+<script>
+function fmtP(n,d=2){if(!n&&n!==0)return'—';return new Intl.NumberFormat('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}).format(n)}
+function fmtL(n){if(!n)return'—';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+'T';if(n>=1e9)return'$'+(n/1e9).toFixed(2)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';return'$'+fmtP(n)}
+let charts={};
+function switchTool(id){
+  document.querySelectorAll('.tool-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tool-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tool-'+id).classList.add('active');
+  document.querySelector('[data-tool="'+id+'"]').classList.add('active');
+}
+function makeChart(id,labels,datasets){
+  if(charts[id])charts[id].destroy();
+  charts[id]=new Chart(document.getElementById(id),{type:'line',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8fa3b8',font:{size:11}}}},scales:{x:{grid:{color:'rgba(30,45,64,0.5)'},ticks:{color:'#4d6478',maxTicksLimit:10}},y:{grid:{color:'rgba(30,45,64,0.5)'},ticks:{color:'#4d6478',callback:v=>'$'+fmtP(v,0)},position:'right'}}}});
+}
+function calcCompound(){
+  const P=parseFloat(document.getElementById('ci-principal').value)||0;
+  const m=parseFloat(document.getElementById('ci-monthly').value)||0;
+  const r=parseFloat(document.getElementById('ci-rate').value)/100/12;
+  const n=parseInt(document.getElementById('ci-years').value)||20;
+  let bal=P;const labels=[],balData=[],invData=[];
+  for(let yr=1;yr<=n;yr++){for(let mo=0;mo<12;mo++){bal=bal*(1+r)+m;}const inv=P+m*12*yr;labels.push('Yr '+yr);balData.push(Math.round(bal));invData.push(Math.round(inv));}
+  const totalInv=P+m*12*n;
+  document.getElementById('ci-final').textContent=fmtL(bal);
+  document.getElementById('ci-invested').textContent=fmtL(totalInv);
+  document.getElementById('ci-gain').textContent=fmtL(bal-totalInv);
+  document.getElementById('ci-mult').textContent=(bal/Math.max(totalInv,1)).toFixed(2)+'x';
+  document.getElementById('ci-result').style.display='block';
+  makeChart('ci-chart',labels,[{label:'Portfolio',data:balData,borderColor:'#c9a84c',backgroundColor:'rgba(201,168,76,0.1)',fill:true,tension:0.4,pointRadius:0},{label:'Invested',data:invData,borderColor:'#4d6478',backgroundColor:'transparent',borderDash:[4,4],tension:0.4,pointRadius:0}]);
+}
+function calcDCA(){
+  const monthly=parseFloat(document.getElementById('dca-amount').value)||0;
+  const years=parseInt(document.getElementById('dca-years').value)||10;
+  const rate=parseFloat(document.getElementById('dca-return').value)/100/12;
+  const lump=parseFloat(document.getElementById('dca-lump').value)||0;
+  let bal=lump;const labels=[],balData=[],contData=[];
+  for(let yr=1;yr<=years;yr++){for(let m=0;m<12;m++){bal=bal*(1+rate)+monthly;}const c=lump+monthly*12*yr;labels.push('Yr '+yr);balData.push(Math.round(bal));contData.push(Math.round(c));}
+  const totalC=lump+monthly*12*years;
+  document.getElementById('dca-final').textContent=fmtL(bal);
+  document.getElementById('dca-contributed').textContent=fmtL(totalC);
+  document.getElementById('dca-gains').textContent=fmtL(bal-totalC);
+  document.getElementById('dca-roi').textContent=((bal/Math.max(totalC,1)-1)*100).toFixed(1)+'%';
+  document.getElementById('dca-result').style.display='block';
+  makeChart('dca-chart',labels,[{label:'Portfolio',data:balData,borderColor:'#2dd4bf',backgroundColor:'rgba(45,212,191,0.1)',fill:true,tension:0.4,pointRadius:0},{label:'Contributed',data:contData,borderColor:'#4d6478',backgroundColor:'transparent',borderDash:[4,4],tension:0.4,pointRadius:0}]);
+}
+function calcRetirement(){
+  const age=parseInt(document.getElementById('ret-age').value);
+  const retireAge=parseInt(document.getElementById('ret-retire').value);
+  const current=parseFloat(document.getElementById('ret-current').value)||0;
+  const monthly=parseFloat(document.getElementById('ret-monthly').value)||0;
+  const rate=parseFloat(document.getElementById('ret-return').value)/100/12;
+  const income=parseFloat(document.getElementById('ret-income').value)||5000;
+  const years=Math.max(retireAge-age,1);
+  let bal=current;for(let i=0;i<years*12;i++)bal=bal*(1+rate)+monthly;
+  const needed=income*12/0.04;
+  const monthlyDraw=bal*0.04/12;
+  const onTrack=bal>=needed;
+  document.getElementById('ret-final').textContent=fmtL(bal);
+  document.getElementById('ret-needed').textContent=fmtL(needed);
+  document.getElementById('ret-draw').textContent='$'+fmtP(monthlyDraw,0)+'/mo';
+  document.getElementById('ret-years').textContent=years+' yrs';
+  document.getElementById('ret-result').style.display='block';
+  const v=document.getElementById('ret-verdict');
+  if(onTrack){v.style.background='rgba(34,197,94,0.08)';v.style.border='1px solid rgba(34,197,94,0.2)';v.innerHTML='✅ <strong>On Track!</strong> Your projected nest egg of '+fmtL(bal)+' exceeds your target of '+fmtL(needed)+'.';}
+  else{v.style.background='rgba(239,68,68,0.08)';v.style.border='1px solid rgba(239,68,68,0.2)';v.innerHTML='⚠️ <strong>Shortfall Alert.</strong> You may fall short by '+fmtL(needed-bal)+'. Consider increasing contributions.';}
+}
+function calcDRIP(){
+  const init=parseFloat(document.getElementById('drip-initial').value)||10000;
+  const yld=parseFloat(document.getElementById('drip-yield').value)/100;
+  const divG=parseFloat(document.getElementById('drip-growth').value)/100;
+  const app=parseFloat(document.getElementById('drip-appreciation').value)/100;
+  const years=parseInt(document.getElementById('drip-years').value)||20;
+  let balDrip=init,balNo=init,currentYield=yld;
+  for(let y=0;y<years;y++){const div=balDrip*currentYield;balDrip=(balDrip+div)*(1+app);balNo=balNo*(1+app);currentYield*=(1+divG);}
+  const annualDiv=balDrip*yld*Math.pow(1+divG,years);
+  document.getElementById('drip-final').textContent=fmtL(balDrip);
+  document.getElementById('drip-no').textContent=fmtL(balNo);
+  document.getElementById('drip-extra').textContent=fmtL(balDrip-balNo);
+  document.getElementById('drip-div').textContent=fmtL(annualDiv)+'/yr';
+  document.getElementById('drip-result').style.display='block';
+}
+function calcOptions(){
+  const type=document.getElementById('opt-type').value;
+  const stock=parseFloat(document.getElementById('opt-stock').value);
+  const strike=parseFloat(document.getElementById('opt-strike').value);
+  const premium=parseFloat(document.getElementById('opt-premium').value);
+  const contracts=parseInt(document.getElementById('opt-contracts').value)||1;
+  let intrinsic,pnl,breakeven;
+  if(type==='call'){intrinsic=Math.max(0,stock-strike);pnl=(intrinsic-premium)*100*contracts;breakeven=strike+premium;}
+  else{intrinsic=Math.max(0,strike-stock);pnl=(intrinsic-premium)*100*contracts;breakeven=strike-premium;}
+  const roi=(pnl/(premium*100*contracts))*100;
+  const pnlEl=document.getElementById('opt-pnl');
+  pnlEl.textContent=(pnl>=0?'+':'')+'$'+fmtP(pnl);
+  pnlEl.style.color=pnl>=0?'var(--green)':'var(--red)';
+  document.getElementById('opt-intrinsic').textContent='$'+fmtP(intrinsic);
+  document.getElementById('opt-breakeven').textContent='$'+fmtP(breakeven);
+  document.getElementById('opt-roi').textContent=roi.toFixed(1)+'%';
+  document.getElementById('opt-result').style.display='block';
+}
+function calcDrawdown(){
+  const val=parseFloat(document.getElementById('dd-value').value)||100000;
+  const pct=parseFloat(document.getElementById('dd-pct').value)/100;
+  const recovery=parseFloat(document.getElementById('dd-recovery').value)/100;
+  const afterDD=val*(1-pct);
+  const loss=val-afterDD;
+  const neededGain=(1/(1-pct)-1)*100;
+  const yearsToRecover=Math.log(val/afterDD)/Math.log(1+recovery);
+  document.getElementById('dd-after').textContent=fmtL(afterDD);
+  document.getElementById('dd-loss').textContent='-'+fmtL(loss);
+  document.getElementById('dd-needed').textContent=neededGain.toFixed(1)+'%';
+  document.getElementById('dd-years').textContent=yearsToRecover.toFixed(1)+' yrs';
+  document.getElementById('dd-note').innerHTML='A <strong>'+(pct*100).toFixed(0)+'% drawdown</strong> requires a <strong>'+neededGain.toFixed(1)+'% gain</strong> just to break even — not '+(pct*100).toFixed(0)+'%. At '+(recovery*100).toFixed(0)+'% annual recovery, you\'d need approximately <strong>'+yearsToRecover.toFixed(1)+' years</strong> to recover.';
+  document.getElementById('dd-result').style.display='block';
+}
+</script>
+</body>
+</html>
